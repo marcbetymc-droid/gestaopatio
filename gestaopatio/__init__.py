@@ -20,20 +20,26 @@ app.config['SECRET_KEY'] = os.getenv(
 )
 
 # Configurações do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
+#app.config['SQLALCHEMY_DATABASE_URI'] = (
+#    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+#    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+#)
+
+# Configuração DB SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/gestaopatio.db'
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configurações de CSRF
 app.config['WTF_CSRF_ENABLED'] = True
 
 # Configurações de cache com Redis
-app.config['CACHE_TYPE'] = 'RedisCache'
-app.config['CACHE_REDIS_HOST'] = os.getenv('CACHE_REDIS_HOST', 'localhost')
-app.config['CACHE_REDIS_PORT'] = int(os.getenv('CACHE_REDIS_PORT', 6379))
-app.config['CACHE_DEFAULT_TIMEOUT'] = int(os.getenv('CACHE_DEFAULT_TIMEOUT', 300))
+app.config['CACHE_TYPE'] = 'SimpleCache'
+#app.config['CACHE_REDIS_HOST'] = os.getenv('CACHE_REDIS_HOST', 'localhost')
+#app.config['CACHE_REDIS_PORT'] = int(os.getenv('CACHE_REDIS_PORT', 6379))
+#app.config['CACHE_DEFAULT_TIMEOUT'] = int(os.getenv('CACHE_DEFAULT_TIMEOUT', 300))
+app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 
 # Inicializa extensões
 database = SQLAlchemy(app)
