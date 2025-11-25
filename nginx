@@ -1,0 +1,13 @@
+server {
+    server_name koandina.com;
+
+    location / {
+        proxy_pass http://unix:/var/www/gestaopatio/app.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /static {
+        alias /var/www/gestaopatio/gestaopatio/static;
+    }
+}
