@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn for gestaopatio
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/gestaopatio
+Environment="PATH=/var/www/gestaopatio/venv/bin"
+ExecStart=/var/www/gestaopatio/venv/bin/gunicorn --workers 3 --bind unix:/var/www/gestaopatio/app.sock wsgi:app
+
+[Install]
+WantedBy=multi-user.target
