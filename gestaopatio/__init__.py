@@ -8,9 +8,6 @@ from flask_caching import Cache
 from dotenv import load_dotenv
 import os
 
-from gestaopatio.routes import bp
-app.register_blueprint(bp)
-
 load_dotenv()
 
 # Inicialização das extensões (sem app)
