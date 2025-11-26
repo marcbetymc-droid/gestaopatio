@@ -4,7 +4,7 @@
 <div class="container-fluid mt-3">
     <h1>RELATÓRIO DE GESTÃO DE PICKING</h1>
     <div class="container-fluid p-2">
-        <form id="search-form" method="POST" action="{{ url_for('buscar_picking') }}">
+        <form id="search-form" method="POST" action="{{ url_for('main.buscar_picking') }}">
             <div class="form-group">
                 <label for="num_transporte">Número de Transporte:</label>
                 <input type="text" class="form-control" id="num_transporte" name="num_transporte" value="{{ gestao_patio.num_transporte if gestao_patio else '' }}" required>
