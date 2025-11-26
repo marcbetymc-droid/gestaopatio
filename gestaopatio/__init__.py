@@ -59,3 +59,4 @@ def load_usuario(id_usuario):
     return Usuario.query.get(int(id_usuario))
 
 # Importa as rotas da aplicação
+from gestaopatio import routes
