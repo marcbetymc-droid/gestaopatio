@@ -1,6 +1,6 @@
 import pandas as pd
 from flask import Flask
-from flask import render_template, redirect, url_for, flash, request, jsonify, Blueprint
+from flask import render_template, redirect, url_for, flash, request, jsonify, Blueprint, current_app
 from gestaopatio.foms import FormCriarConta, FormLogin, FormAgendamentos, FormReagenda, FormFrota, FormCliente, FormEmbarcador, FormFrotaTerceiro, FormMotorista, FormControlPatio, FormControlFaixa 
 from datetime import date, datetime, time, timezone, timedelta
 from flask_wtf import FlaskForm
@@ -17,6 +17,7 @@ from flask_wtf.csrf import generate_csrf
 from sqlalchemy import func
 from gestaopatio import database, bcrypt
 from zoneinfo import ZoneInfo
+
 
 bp = Blueprint('main', __name__)
 
