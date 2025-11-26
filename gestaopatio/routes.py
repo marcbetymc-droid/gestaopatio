@@ -301,7 +301,7 @@ def graficos():
 @bp.route('/carrega')
 @login_required
 def carrega():
-    from gestaopatio.models import Agendamentos
+       from gestaopatio.models import Agendamentos
        lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None, Agendamentos.fim_carregamento == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
        return render_template('Carrega.html', lista_cargas=lista_cargas)
     
