@@ -4,10 +4,10 @@
 <div class="container-fluid mt-3">
     <h1>Gestão de Patio</h1>
     <div class="container-fluid p-2">
-        <a class="w-15" href="{{ url_for('controle_faixa') }}">
+        <a class="w-15" href="{{ url_for('main.controle_faixa') }}">
             <button class="btn btn-dark mb-1">Incluir Frota</button>
         </a>
-        <a class="w-15" href="{{ url_for('arq_picking') }}">
+        <a class="w-15" href="{{ url_for('main.arq_picking') }}">
             <button class="btn btn-danger mb-1">Importar Gravatas</button>
         </a>
         <table class="table table-striped" style="font-size: 11px;">
@@ -62,10 +62,10 @@
                     <td>
                         <div class="d-block d-flex flex-wrap gap-1">
               
-                            <a href="{{ url_for('controle_patio', control_patio_id=controles.id) }}" class="btn btn-dark btn-sm p-1">Alterar</a>                      
-                            <a href="{{ url_for('gestao_picking', control_patio_id=controles.id) }}" class="btn btn-secondary btn-sm p-1">Picking</a>
-                            <a href="{{ url_for('carregar_frota', control_patio_id=controles.id) }}" class="btn btn-danger btn-sm p-1">Carregar</a>
-                            <a href="{{ url_for('concluir_faixa', control_patio_id=controles.id) }}" class="btn btn-success btn-sm p-1">Concluir</a>
+                            <a href="{{ url_for('main.controle_patio', control_patio_id=controles.id) }}" class="btn btn-dark btn-sm p-1">Alterar</a>                      
+                            <a href="{{ url_for('main.gestao_picking', control_patio_id=controles.id) }}" class="btn btn-secondary btn-sm p-1">Picking</a>
+                            <a href="{{ url_for('main.carregar_frota', control_patio_id=controles.id) }}" class="btn btn-danger btn-sm p-1">Carregar</a>
+                            <a href="{{ url_for('main.concluir_faixa', control_patio_id=controles.id) }}" class="btn btn-success btn-sm p-1">Concluir</a>
                         
                         </div>    
                     </td>
