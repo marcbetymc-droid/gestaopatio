@@ -8,7 +8,7 @@
     <div class="container-fluid container">
     
       
-    <a class="navbar-brand" href="{{ url_for('home')}}">AGENDA</a>
+    <a class="navbar-brand" href="{{ url_for('main.home')}}">AGENDA</a>
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -18,7 +18,7 @@
       
           {% else %}
                 <li class="nav-item">
-                <a class="nav-link" href="{{url_for('painel_acompanha')}}"">Agendamentos</a>
+                <a class="nav-link" href="{{url_for('main.painel_acompanha')}}"">Agendamentos</a>
                 </li>
          
           {% endif %} 
@@ -27,20 +27,20 @@
           {% if current_user.is_authenticated %}       
           
             <li class="nav-item">
-            <a class="nav-link" href="{{url_for('sair')}}">Sair</a>
+            <a class="nav-link" href="{{url_for('main.sair')}}">Sair</a>
             </li>
 
             <li class="nav-item">
-            <a class="nav-link" href="{{url_for('graficos')}}">Gráficos</a>
+            <a class="nav-link" href="{{url_for('main.graficos')}}">Gráficos</a>
             </li>
 
           {% else %}
             <li class="nav-item">
-            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+            <a class="nav-link" href="{{url_for('main.login')}}">Login</a>
             </li>
            
             <li class="nav-item">
-            <a class="nav-link" href="{{url_for('stage_in')}}">Stage In</a>
+            <a class="nav-link" href="{{url_for('main.stage_in')}}">Stage In</a>
             </li>
 
             <li>
@@ -120,4 +120,5 @@
     padding: 20px 20px; /* Aumenta o espaço interno dos itens */
   }
 </style>
+
 
