@@ -15,7 +15,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import func
-from gestaopatio.models import Agendamentos, Usuario, Motorista, Frota_Andina, Cliente_Andina, Frota_Terceiros, Arquivos, Vendas_ME, Control_Patio, ControlPicking
 from gestaopatio import database, bcrypt
 from zoneinfo import ZoneInfo
 
@@ -24,6 +23,7 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def home():
+    from gestaopatio.models import Agendamentos
     cache = current_app.extensions['cache']
     resultado = cache.get('home_page')
     if resultado:
@@ -40,6 +40,7 @@ def home():
     
 @bp.route('/painel')
 def painel():
+    from gestaopatio.models import Agendamentos
     cache = current_app.extensions['cache']
     resultado1 = cache.get('painel_page')
     if resultado1:
@@ -56,6 +57,7 @@ def painel():
        
 @bp.route('/painel_acompanha')
 def painel_acompanha():
+    from gestaopatio.models import Agendamentos
     cache = current_app.extensions['cache']
     resultado2 = cache.get('painel_acompanha_page')
     if resultado2:
@@ -68,6 +70,7 @@ def painel_acompanha():
        
 @bp.route('/painel_produtos')
 def painel_produtos():
+    from gestaopatio.models import Agendamentos
     cache = current_app.extensions['cache']
     resultado3 = cache.get('painel_produtos_page')
     if resultado3:
@@ -105,6 +108,7 @@ def atualizar_gnre():
     
 @bp.route('/painel_rota')
 def painel_rota():
+    from gestaopatio.models import Control_Patio
     cache = current_app.extensions['cache']
     resultado4 = cache.get('painel_rota_page')
     if resultado3:
@@ -128,6 +132,7 @@ def painel_rota():
 
 @bp.route('/stage_in')
 def stage_in():
+    from gestaopatio.models import Control_Patio
     lista_patio = Control_Patio.query.filter(
         Control_Patio.num_doca.isnot(None),
         Control_Patio.num_frota.isnot(None),
@@ -161,6 +166,7 @@ def stage_in():
 
 @bp.route('/update_content')
 def update_content():
+    from gestaopatio.models import Control_Patio
     # Consulta os registros válidos
     lista_patio = Control_Patio.query.filter(
         Control_Patio.num_doca.isnot(None),
@@ -196,18 +202,21 @@ def update_content():
     )
 
 @bp.route('/painel_patio')
-def painel_patio():      
+def painel_patio():
+     from gestaopatio.models import Control_Patio
      lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).all()
      return render_template('Controle Patio.html', lista_patio=lista_patio)
 
 @bp.route('/gestao_patio')
-def gestao_patio():      
+def gestao_patio():
+     from gestaopatio.models import Control_Patio
      lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).all()
      return render_template('Gestão Faixa.html', lista_patio=lista_patio)
 
 
 @bp.route('/lista_arquivos', methods=['GET'])
 def lista_arquivos():
+    from gestaopatio.models import Arquivos
     try:
         # Consulta todos os registros da tabela Arquivos
         lista_arquivos = Arquivos.query.order_by(Arquivos.ultima_alteracao.desc()).all()
@@ -263,6 +272,7 @@ def gestao_picking():
     
 @bp.route('/lista_picking')
 def lista_picking():
+    from gestaopatio.models import ControlPicking
     lista_picking = ControlPicking.query.all()
     total_qtd_remessa = sum(int(picking.qtd_remessa) for picking in lista_picking if picking.qtd_remessa.isdigit())
     return render_template('Lista Picking.html', lista_picking=lista_picking, total_qtd_remessa=total_qtd_remessa)
@@ -291,6 +301,7 @@ def graficos():
 @bp.route('/carrega')
 @login_required
 def carrega():
+    from gestaopatio.models import Agendamentos
        lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None, Agendamentos.fim_carregamento == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
        return render_template('Carrega.html', lista_cargas=lista_cargas)
     
@@ -436,6 +447,7 @@ def buscar_transporte():
     return render_template('Documentacao.html', agendamentos=agendamentos, vendas_me=vendas_me)
 
 def get_agendamentos(num_transporte):
+    from gestaopatio.models import Agendamentos
     return Agendamentos.query.filter_by(num_transporte=num_transporte).all()
 
 def get_vendas(num_transporte):
@@ -601,6 +613,7 @@ def reagenda():
     
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+       from gestaopatio.models import Usuario
        form_login= FormLogin()
        if form_login.validate_on_submit():
            usuario = Usuario.query.filter_by(email=form_login.username.data).first()
@@ -780,6 +793,7 @@ def controle_faixa():
 
 @bp.route('/controle_patio', methods=['GET', 'POST'])
 def controle_patio():
+    from gestaopatio.models import Control_Patio
     control_patio_id = request.args.get('control_patio_id', type=int)
     controles = Control_Patio.query.get_or_404(control_patio_id)
     form_gestao_patio = FormControlPatio()
@@ -841,6 +855,7 @@ def controle_patio():
 
 @bp.route('/carregar_frota', methods=['GET', 'POST'])
 def carregar_frota():
+        from gestaopatio.models import Control_Patio
         control_patio_id = request.args.get('control_patio_id', type=int)
         controles = Control_Patio.query.get_or_404(control_patio_id)
         controles.status_faixa = 'Carregando'
@@ -852,6 +867,7 @@ def carregar_frota():
 
 @bp.route('/concluir_faixa', methods=['GET', 'POST'])
 def concluir_faixa():
+        from gestaopatio.models import Control_Patio
         control_patio_id = request.args.get('control_patio_id', type=int)
         controles = Control_Patio.query.get_or_404(control_patio_id)
         utc_now = datetime.utcnow()
@@ -905,6 +921,7 @@ def combine_date_time(date_value, time_value):
     return datetime.combine(date_value, time_value)
 
 def save_to_database(merged_df):
+    from gestaopatio.models import ControlPicking
     # Limpar a tabela ControlPicking antes de inserir novos dados
     ControlPicking.query.delete()
     database.session.commit()    
