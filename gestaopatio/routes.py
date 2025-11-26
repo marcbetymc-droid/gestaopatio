@@ -22,43 +22,65 @@ from zoneinfo import ZoneInfo
 
 bp = Blueprint('main', __name__)
 
-@cache.cached(timeout=120)
 
 @bp.route('/')
 def home():
-       lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
-        
-       return render_template('Home.html', lista_cargas=lista_cargas)
+    cache = current_app.extensions['cache']
+    resultado = cache.get('home_page')
+    if resultado:
+        return resultado
+
+    lista_cargas = Agendamentos.query.filter(
+        Agendamentos.status_carga == None
+    ).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
+
+    resultado = render_template('Home.html', lista_cargas=lista_cargas)
+    cache.set('home_page', resultado, timeout=120)
+    return resultado
+
     
-@cache.cached(timeout=120)
 @bp.route('/painel')
 def painel():
+    cache = current_app.extensions['cache']
+    resultado1 = cache.get('painel_page')
+    if resultado1:
+        return resultado1   
     lista_cargas = Agendamentos.query.filter(
         Agendamentos.status_carga == None,
         Agendamentos.saida_portaria == None
     ).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
 
     tz_sp = ZoneInfo("America/Sao_Paulo")  # Fuso horário de São Paulo
-    return render_template('Painel Cargas.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
-
-@cache.cached(timeout=120)
+    resultado1 = render_template('Painel Cargas.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
+    cache.set('painel_page', resultado1, timeout=120)
+    return resultado1
+       
 @bp.route('/painel_acompanha')
 def painel_acompanha():
-        
+    cache = current_app.extensions['cache']
+    resultado2 = cache.get('painel_acompanha_page')
+    if resultado2:
+        return resultado2       
     lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
     tz_sp = ZoneInfo("America/Sao_Paulo")  # Fuso horário de São Paulo
-    return render_template('Painel Carga.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
-
-@cache.cached(timeout=180)
+    resultado2 = render_template('Painel Carga.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
+    cache.set('painel_acompanha_page', resultado2, timeout=120)
+    return resultado2
+       
 @bp.route('/painel_produtos')
 def painel_produtos():
+    cache = current_app.extensions['cache']
+    resultado3 = cache.get('painel_produtos_page')
+    if resultado3:
+        return resultado3       
     vendas = Vendas_ME.query.all()
     cargas = Agendamentos.query.all()
     
     lista_carga = {Agendamentos.num_transporte: Agendamentos for Agendamentos in cargas}
     csrf_token = generate_csrf()
-    return render_template('Painel Produtos.html', vendas=vendas, lista_carga = lista_carga, csrf_token=csrf_token)
-
+    resultado3 = render_template('Painel Produtos.html', vendas=vendas, lista_carga = lista_carga, csrf_token=csrf_token)
+    cache.set('painel_produtos_page', resultado3, timeout=120)
+    return resultado3
 
 
 @bp.route('/atualizar_gnre', methods=['POST'])
@@ -82,9 +104,12 @@ def atualizar_gnre():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
     
-@cache.cached(timeout=120)
 @bp.route('/painel_rota')
 def painel_rota():
+    cache = current_app.extensions['cache']
+    resultado4 = cache.get('painel_rota_page')
+    if resultado3:
+        return resultado4          
     lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).order_by(Control_Patio.num_doca).all()
     #lista_patio = Control_Patio.query.filter(Control_Patio.num_frota == '1057').order_by(Control_Patio.num_doca).all()
     #lista_patio = Control_Patio.query.filter(Control_Patio.status_frota == 'Carregando').order_by(Control_Patio.num_doca).all()  
@@ -98,8 +123,9 @@ def painel_rota():
             ControlPicking.tipo_palete == 'PICKING'
         ).scalar()
     
-    return render_template('Controle Patio.html', lista_patio=lista_patio)
-
+    resultado4 = render_template('Controle Patio.html', lista_patio=lista_patio)
+    cache.set('painel_rota_page', resultado4, timeout=120)
+    return resultado4
 
 @bp.route('/stage_in')
 def stage_in():
