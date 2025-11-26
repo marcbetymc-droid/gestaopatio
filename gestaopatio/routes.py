@@ -1,7 +1,6 @@
 import pandas as pd
 from flask import Flask
 from flask import render_template, redirect, url_for, flash, request, jsonify, Blueprint
-from gestaopatio import cache
 from gestaopatio.foms import FormCriarConta, FormLogin, FormAgendamentos, FormReagenda, FormFrota, FormCliente, FormEmbarcador, FormFrotaTerceiro, FormMotorista, FormControlPatio, FormControlFaixa 
 from datetime import date, datetime, time, timezone, timedelta
 from flask_wtf import FlaskForm
