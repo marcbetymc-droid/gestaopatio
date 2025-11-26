@@ -1,6 +1,6 @@
 import pandas as pd
 from flask import Flask
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, Blueprint
 from gestaopatio import cache
 from gestaopatio.foms import FormCriarConta, FormLogin, FormAgendamentos, FormReagenda, FormFrota, FormCliente, FormEmbarcador, FormFrotaTerceiro, FormMotorista, FormControlPatio, FormControlFaixa 
 from datetime import date, datetime, time, timezone, timedelta
@@ -19,6 +19,8 @@ from sqlalchemy import func
 from gestaopatio.models import Agendamentos, Usuario, Motorista, Frota_Andina, Cliente_Andina, Frota_Terceiros, Arquivos, Vendas_ME, Control_Patio, ControlPicking
 from gestaopatio import database, bcrypt
 from zoneinfo import ZoneInfo
+
+bp = Blueprint('main', __name__)
 
 @cache.cached(timeout=120)
 @app.route('/')
