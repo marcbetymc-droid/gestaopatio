@@ -25,7 +25,7 @@ bp = Blueprint('main', __name__)
 @bp.route('/')
 def home():
     from gestaopatio.models import Agendamentos
-    cache = current_app.extensions['cache']
+
     resultado = cache.get('home_page')
     if resultado:
         return resultado
@@ -42,7 +42,7 @@ def home():
 @bp.route('/painel')
 def painel():
     from gestaopatio.models import Agendamentos
-    cache = current_app.extensions['cache']
+
     resultado1 = cache.get('painel_page')
     if resultado1:
         return resultado1   
@@ -59,7 +59,7 @@ def painel():
 @bp.route('/painel_acompanha')
 def painel_acompanha():
     from gestaopatio.models import Agendamentos
-    cache = current_app.extensions['cache']
+
     resultado2 = cache.get('painel_acompanha_page')
     if resultado2:
         return resultado2       
@@ -72,7 +72,7 @@ def painel_acompanha():
 @bp.route('/painel_produtos')
 def painel_produtos():
     from gestaopatio.models import Agendamentos
-    cache = current_app.extensions['cache']
+
     resultado3 = cache.get('painel_produtos_page')
     if resultado3:
         return resultado3       
@@ -110,7 +110,7 @@ def atualizar_gnre():
 @bp.route('/painel_rota')
 def painel_rota():
     from gestaopatio.models import Control_Patio
-    cache = current_app.extensions['cache']
+
     resultado4 = cache.get('painel_rota_page')
     if resultado3:
         return resultado4          
