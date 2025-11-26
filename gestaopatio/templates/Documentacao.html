@@ -4,7 +4,7 @@
 <div class="container-fluid mt-3">
     <h1>RELATÓRIO DE AGENDAMENTOS - MERCADO EXTERNO</h1>
     <div class="container-fluid p-2">
-        <form id="search-form" method="POST" action="{{ url_for('buscar_transporte') }}">
+        <form id="search-form" method="POST" action="{{ url_for('main.buscar_transporte') }}">
             <div class="form-group">
                 <label for="num_transporte">Número de Transporte:</label>
                 <input type="text" class="form-control" id="num_transporte" name="num_transporte" required>
