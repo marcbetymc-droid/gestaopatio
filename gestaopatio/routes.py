@@ -23,14 +23,15 @@ from zoneinfo import ZoneInfo
 bp = Blueprint('main', __name__)
 
 @cache.cached(timeout=120)
-@app.route('/')
+
+@bp.route('/')
 def home():
        lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
         
        return render_template('Home.html', lista_cargas=lista_cargas)
     
 @cache.cached(timeout=120)
-@app.route('/painel')
+@bp.route('/painel')
 def painel():
     lista_cargas = Agendamentos.query.filter(
         Agendamentos.status_carga == None,
@@ -41,7 +42,7 @@ def painel():
     return render_template('Painel Cargas.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
 
 @cache.cached(timeout=120)
-@app.route('/painel_acompanha')
+@bp.route('/painel_acompanha')
 def painel_acompanha():
         
     lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
@@ -49,7 +50,7 @@ def painel_acompanha():
     return render_template('Painel Carga.html', lista_cargas=lista_cargas, tz_sp=tz_sp)
 
 @cache.cached(timeout=180)
-@app.route('/painel_produtos')
+@bp.route('/painel_produtos')
 def painel_produtos():
     vendas = Vendas_ME.query.all()
     cargas = Agendamentos.query.all()
@@ -60,7 +61,7 @@ def painel_produtos():
 
 
 
-@app.route('/atualizar_gnre', methods=['POST'])
+@bp.route('/atualizar_gnre', methods=['POST'])
 def atualizar_gnre():
     try:
         data = request.get_json()
@@ -82,7 +83,7 @@ def atualizar_gnre():
         return jsonify({'success': False, 'error': str(e)}), 500
     
 @cache.cached(timeout=120)
-@app.route('/painel_rota')
+@bp.route('/painel_rota')
 def painel_rota():
     lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).order_by(Control_Patio.num_doca).all()
     #lista_patio = Control_Patio.query.filter(Control_Patio.num_frota == '1057').order_by(Control_Patio.num_doca).all()
@@ -100,7 +101,7 @@ def painel_rota():
     return render_template('Controle Patio.html', lista_patio=lista_patio)
 
 
-@app.route('/stage_in')
+@bp.route('/stage_in')
 def stage_in():
     lista_patio = Control_Patio.query.filter(
         Control_Patio.num_doca.isnot(None),
@@ -133,7 +134,7 @@ def stage_in():
         stage_disponiveis=stage_disponiveis
     )
 
-@app.route('/update_content')
+@bp.route('/update_content')
 def update_content():
     # Consulta os registros válidos
     lista_patio = Control_Patio.query.filter(
@@ -169,18 +170,18 @@ def update_content():
         stage_disponiveis=stage_disponiveis
     )
 
-@app.route('/painel_patio')
+@bp.route('/painel_patio')
 def painel_patio():      
      lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).all()
      return render_template('Controle Patio.html', lista_patio=lista_patio)
 
-@app.route('/gestao_patio')
+@bp.route('/gestao_patio')
 def gestao_patio():      
      lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).all()
      return render_template('Gestão Faixa.html', lista_patio=lista_patio)
 
 
-app.route('/lista_arquivos', methods=['GET'])
+@bp.route('/lista_arquivos', methods=['GET'])
 def lista_arquivos():
     try:
         # Consulta todos os registros da tabela Arquivos
@@ -194,7 +195,7 @@ def lista_arquivos():
         flash(f'Ocorreu um erro ao carregar os arquivos: {str(e)}', 'alert-danger')
         return redirect(url_for('arq_produtos'))
 
-@app.route('/gestao_picking')
+@bp.route('/gestao_picking')
 def gestao_picking():
     control_patio_id = request.args.get('control_patio_id', type=int)
     controle_patio = Control_Patio.query.get_or_404(control_patio_id)
@@ -235,40 +236,40 @@ def gestao_picking():
     return render_template('Painel Picking.html', controle_patio=controle_patio, separacao=separacao, now=current_time)
 
     
-@app.route('/lista_picking')
+@bp.route('/lista_picking')
 def lista_picking():
     lista_picking = ControlPicking.query.all()
     total_qtd_remessa = sum(int(picking.qtd_remessa) for picking in lista_picking if picking.qtd_remessa.isdigit())
     return render_template('Lista Picking.html', lista_picking=lista_picking, total_qtd_remessa=total_qtd_remessa)
 
 
-@app.route('/perfil')
+@bp.route('/perfil')
 @login_required
 def perfil():
        foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil.html', foto_perfil=foto_perfil)
     
-@app.route('/perfil_moto')
+@bp.route('/perfil_moto')
 @login_required
 def perfil_moto():
        form_moto = FormMotorista()
        foto_motorista=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil_Motorista.html', foto_motorista=foto_motorista)
 
-@app.route('/graficos')
+@bp.route('/graficos')
 @login_required
 def graficos():
        foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Gráficos.html', foto_perfil=foto_perfil)
     
     
-@app.route('/carrega')
+@bp.route('/carrega')
 @login_required
 def carrega():
        lista_cargas = Agendamentos.query.filter(Agendamentos.status_carga == None, Agendamentos.fim_carregamento == None).order_by(Agendamentos.entrydate, Agendamentos.entryhour).all()
        return render_template('Carrega.html', lista_cargas=lista_cargas)
     
-@app.route('/agendamentos', methods=['GET', 'POST'])
+@bp.route('/agendamentos', methods=['GET', 'POST'])
 @login_required
 def agendamento():
     form_agendamento = FormAgendamentos()
@@ -325,12 +326,12 @@ def agendamento():
     return render_template('Agendamento.html', form_agendamento=form_agendamento)
     
 
-@app.route('/arq_agenda', methods=['GET', 'POST'])
+@bp.route('/arq_agenda', methods=['GET', 'POST'])
 def arq_agenda():
        return render_template('Arq_Agendamento.html')
     
     
-@app.route('/arq_agenda/upload', methods=['GET', 'POST'])
+@bp.route('/arq_agenda/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -402,7 +403,7 @@ def upload_file():
 
     return render_template('Arq_Agendamento.html')
 
-@app.route('/buscar_transporte', methods=['POST'])
+@bp.route('/buscar_transporte', methods=['POST'])
 def buscar_transporte():
     num_transporte = request.form['num_transporte']
     agendamentos = get_agendamentos(num_transporte)  # Função que busca agendamentos
@@ -415,12 +416,12 @@ def get_agendamentos(num_transporte):
 def get_vendas(num_transporte):
     return Vendas_ME.query.filter_by(num_transporte=num_transporte).all()
 
-@app.route('/relatorios')
+@bp.route('/relatorios')
 @login_required
 def relatorio_me():
     return render_template('Documentacao.html', agendamentos=None, vendas=None)
 
-@app.route('/relatorios/upload', methods=['GET', 'POST'])
+@bp.route('/relatorios/upload', methods=['GET', 'POST'])
 def arq_produtos():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -508,7 +509,7 @@ def arq_produtos():
 
     return render_template('Produtos Cargas.html')
 
-@app.route('/reagenda', methods=['GET', 'POST'])
+@bp.route('/reagenda', methods=['GET', 'POST'])
 @login_required
 def reagenda():
        agendamento_id = request.args.get('agendamento_id', type=int)
@@ -573,7 +574,7 @@ def reagenda():
            return redirect(url_for('carrega') )    
        return render_template('Reagendamento.html', form_reagenda=form_reagenda, botao_clicado=botao_clicado)
     
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
        form_login= FormLogin()
        if form_login.validate_on_submit():
@@ -591,7 +592,7 @@ def login():
        return render_template('Login.html', form_login=form_login)
     
     
-@app.route('/acesso', methods=['GET', 'POST'])
+@bp.route('/acesso', methods=['GET', 'POST'])
 def cadastro():
     form_conta = FormCriarConta()
     if form_conta.validate_on_submit():
@@ -623,7 +624,7 @@ def cadastro():
     
     
     
-@app.route('/entidade', methods=['GET', 'POST'])
+@bp.route('/entidade', methods=['GET', 'POST'])
 @login_required
 def entidade():
        form_cliente= FormCliente()
@@ -655,7 +656,7 @@ def entidade():
            return redirect(url_for('entidade') )    
        return render_template('Cadastro_entidades.html', form_cliente=form_cliente, form_embarcador=form_embarcador)
     
-@app.route('/check_in/', methods=['GET', 'POST'])
+@bp.route('/check_in/', methods=['GET', 'POST'])
 def check_in():
     agendamento_id = request.args.get('agendamento_id', type=int)
     agendamentos_c = Agendamentos.query.get_or_404(agendamento_id)
@@ -672,7 +673,7 @@ def check_in():
     flash('Check-In realizado com sucesso!', 'alert-success')
     return redirect(url_for('painel'))
 
-@app.route('/entrada_patio/', methods=['GET', 'POST'])
+@bp.route('/entrada_patio/', methods=['GET', 'POST'])
 def entrada_patio():
         agendamento_id = request.args.get('agendamento_id', type=int)
         agendamentos_e = Agendamentos.query.get_or_404(agendamento_id)
@@ -685,7 +686,7 @@ def entrada_patio():
         flash('Entrada pátio realizado com sucesso!', 'alert-success')
         return redirect(url_for('painel'))
     
-@app.route('/inicio_carga/', methods=['GET', 'POST'])
+@bp.route('/inicio_carga/', methods=['GET', 'POST'])
 def inicio_carga():
         agendamento_id = request.args.get('agendamento_id', type=int)
         agendamentos_i = Agendamentos.query.get_or_404(agendamento_id)
@@ -698,7 +699,7 @@ def inicio_carga():
         flash('Inicio de operação realizado com sucesso!', 'alert-success')
         return redirect(url_for('painel'))
     
-@app.route('/fim_carga/', methods=['GET', 'POST'])
+@bp.route('/fim_carga/', methods=['GET', 'POST'])
 def fim_carga():
         agendamento_id = request.args.get('agendamento_id', type=int)
         agendamentos_f = Agendamentos.query.get_or_404(agendamento_id)
@@ -711,7 +712,7 @@ def fim_carga():
         flash('Operação concluída com sucesso!', 'alert-success')
         return redirect(url_for('painel'))
     
-@app.route('/saida_portaria/', methods=['GET', 'POST'])
+@bp.route('/saida_portaria/', methods=['GET', 'POST'])
 def saida_portaria():
         agendamento_id = request.args.get('agendamento_id', type=int)
         agendamentos_s = Agendamentos.query.get_or_404(agendamento_id)
@@ -725,7 +726,7 @@ def saida_portaria():
         return redirect(url_for('painel'))
 
 
-@app.route('/controle_faixa', methods=['GET', 'POST'])
+@bp.route('/controle_faixa', methods=['GET', 'POST'])
 def controle_faixa():
         form_gestao_patio = FormControlFaixa()
         utc_now = datetime.utcnow()
@@ -752,7 +753,7 @@ def controle_faixa():
         return render_template('Control Patio.html', form_gestao_patio=form_gestao_patio)
 
 
-@app.route('/controle_patio', methods=['GET', 'POST'])
+@bp.route('/controle_patio', methods=['GET', 'POST'])
 def controle_patio():
     control_patio_id = request.args.get('control_patio_id', type=int)
     controles = Control_Patio.query.get_or_404(control_patio_id)
@@ -813,7 +814,7 @@ def controle_patio():
 
 
 
-@app.route('/carregar_frota', methods=['GET', 'POST'])
+@bp.route('/carregar_frota', methods=['GET', 'POST'])
 def carregar_frota():
         control_patio_id = request.args.get('control_patio_id', type=int)
         controles = Control_Patio.query.get_or_404(control_patio_id)
@@ -824,7 +825,7 @@ def carregar_frota():
         return redirect(url_for('painel_rota'))
 
 
-@app.route('/concluir_faixa', methods=['GET', 'POST'])
+@bp.route('/concluir_faixa', methods=['GET', 'POST'])
 def concluir_faixa():
         control_patio_id = request.args.get('control_patio_id', type=int)
         controles = Control_Patio.query.get_or_404(control_patio_id)
@@ -838,7 +839,7 @@ def concluir_faixa():
         flash(f'Frota finalizada', 'alert-success')
         return redirect(url_for('painel_rota'))
 
-@app.route('/arq_picking', methods=['GET', 'POST'])
+@bp.route('/arq_picking', methods=['GET', 'POST'])
 def arq_picking():
     if request.method == 'POST':
         try:
@@ -908,7 +909,7 @@ def save_to_database(merged_df):
     database.session.commit()
 
 
-@app.route('/sair')
+@bp.route('/sair')
 @login_required
 def sair():
        logout_user()
