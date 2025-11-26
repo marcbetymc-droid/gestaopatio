@@ -6,7 +6,7 @@
     		{% for recebimento in lista_cargas %}
     			<strong>{{ recebimento.entrydate }}<strong>  <strong>{{recebimento.entryhour}}<strong> <strong>{{recebimento.origem}}<strong> <strong>{{recebimento.destino}}<strong> <div class="button mt-2 d-flex flex-row align-items-center">
 
-                     <a class = "w-100" href="{{ url_for('carrega')}}">  
+                     <a class = "w-100" href="{{ url_for('main.carrega')}}">  
                         <button class="btn btn-sm btn-danger w-100 ml-2">Carregamento</button>
                      </a>
                        
