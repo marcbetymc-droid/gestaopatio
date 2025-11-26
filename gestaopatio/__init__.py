@@ -25,9 +25,7 @@ def create_app():
         'SECRET_KEY',
         'e3f1c2a8b9d4e6f7a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4'
     )
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-        'DATABASE_URL',
-        'sqlite:///database/gestaopatio.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://koandina:<senha>@localhost:5432/agendamentos'
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['WTF_CSRF_ENABLED'] = True
