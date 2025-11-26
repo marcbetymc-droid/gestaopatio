@@ -7,11 +7,11 @@
         <div id="origem-filters" class="mb-1 text-center"></div> <!-- Contêiner para os checkboxes -->
         <button id="apply-filters" class="btn btn-dark mb-1">Aplicar Filtros</button> <!-- Botão para aplicar filtros -->
 
-        <a class="w-15" href="{{ url_for('carrega') }}">
+        <a class="w-15" href="{{ url_for('main.carrega') }}">
             <button class="btn btn-danger mb-1">Reagendar/Cancelar/Alterar</button>
         </a>
 
-        <a class="w-15" href="{{ url_for('relatorio_me') }}">
+        <a class="w-15" href="{{ url_for('main.relatorio_me') }}">
             <button class="btn btn-danger mb-1">Relatório</button>
         </a>
     </div>
@@ -61,31 +61,31 @@
                     <td>{{ agendamentos.tipo_operacao }}</td>
                     <td>
                         {% if not agendamentos.check_in %}
-                        <form action="{{ url_for('check_in', agendamento_id=agendamentos.id) }}" method="post">
+                        <form action="{{ url_for('main.check_in', agendamento_id=agendamentos.id) }}" method="post">
                             <button type="submit" class="btn btn-success btn-sm" {% if agendamentos.check_in %}disabled{% endif %}>CheckIn</button>
                         </form>
                         {% endif %}
 
                         {% if not agendamentos.entrada_patio and agendamentos.check_in %}
-                        <form action="{{ url_for('entrada_patio', agendamento_id=agendamentos.id) }}" method="post">
+                        <form action="{{ url_for('main.entrada_patio', agendamento_id=agendamentos.id) }}" method="post">
                             <button type="submit" class="btn btn-danger btn-sm" {% if agendamentos.entrada_patio %}disabled{% endif %}>Entrada</button>
                         </form>
                         {% endif %}
 
                         {% if not agendamentos.carregamento and agendamentos.check_in and agendamentos.entrada_patio %}
-                        <form action="{{ url_for('inicio_carga', agendamento_id=agendamentos.id) }}" method="post">
+                        <form action="{{ url_for('main.inicio_carga', agendamento_id=agendamentos.id) }}" method="post">
                             <button type="submit" class="btn btn-secondary btn-sm" {% if agendamentos.carregamento %}disabled{% endif %}>Inicio</button>
                         </form>
                         {% endif %}
 
                         {% if not agendamentos.fim_carregamento and agendamentos.check_in and agendamentos.entrada_patio and agendamentos.carregamento %}
-                        <form action="{{ url_for('fim_carga', agendamento_id=agendamentos.id) }}" method="post">
+                        <form action="{{ url_for('main.fim_carga', agendamento_id=agendamentos.id) }}" method="post">
                             <button type="submit" class="btn btn-danger btn-sm" {% if agendamentos.fim_carregamento %}disabled{% endif %}>Fim</button>
                         </form>
                         {% endif %}
 
                         {% if not agendamentos.saida_portaria and agendamentos.check_in and agendamentos.entrada_patio and agendamentos.carregamento and agendamentos.fim_carregamento %}
-                        <form action="{{ url_for('saida_portaria', agendamento_id=agendamentos.id) }}" method="post">
+                        <form action="{{ url_for('main.saida_portaria', agendamento_id=agendamentos.id) }}" method="post">
                             <button type="submit" class="btn btn-dark btn-sm" {% if agendamentos.saida_portaria %}disabled{% endif %}>Saída</button>
                         </form>
                         {% endif %}
@@ -138,4 +138,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
+
 
