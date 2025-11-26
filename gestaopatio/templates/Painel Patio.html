@@ -10,11 +10,11 @@
                      <button id="apply-filters" class="btn btn-dark mb-1">Aplicar Filtros</button> <!-- Botão para aplicar filtros -->
                     
                     
-                    <a class = "w-15" href="{{ url_for('carrega')}}">  
+                    <a class = "w-15" href="{{ url_for('main.carrega')}}">  
                     <button class="btn btn-danger mb-1">Reagendar/Cancelar/Alterar</button>
                     </a>
 
-                    <a class = "w-15" href="{{ url_for('relatorio_me')}}">  
+                    <a class = "w-15" href="{{ url_for('main.relatorio_me')}}">  
                     <button class="btn btn-danger mb-1">Relatório</button>
                     </a>     
                 </div> 
@@ -52,25 +52,25 @@
                         <td>
                             
                             {% if not controle.portaria %}
-                            <form action="{{ url_for('portaria', controle_id=controle.id) }}" method="post">
+                            <form action="{{ url_for('main.portaria', controle_id=controle.id) }}" method="post">
                         <button type="submit" class="btn btn-success btn-sm" {% if controle.portaria %}disabled{% endif %}>Portaria</button>
                             </form>
                             {% endif %}
                             
                             {% if not controle.patio and controle.portaria %}
-                            <form action="{{ url_for('entrada_patio', controle_id=controle.id) }}" method="post">
+                            <form action="{{ url_for('main.entrada_patio', controle_id=controle.id) }}" method="post">
                         <button type="submit" class="btn btn-danger btn-sm" {% if controle.patio %}disabled{% endif %}>Patio</button>
                             </form>
                             {% endif %}
                             
                             {% if not controle.faixa and controle.portaria and controle.patio %}
-                            <form action="{{ url_for('inicio_carga', controle_id=controle.id) }}" method="post">
+                            <form action="{{ url_for('main.inicio_carga', controle_id=controle.id) }}" method="post">
                         <button type="submit" class="btn btn-secondary btn-sm" {% if controle.faixa %}disabled{% endif %}>Faixa</button>
                             </form>
                             {% endif %}
                             
                             {% if not controle.concluido and controle.portaria and controle.patio and controle.faixa %}
-                            <form action="{{ url_for('fim_carga', controle_id=controle.id) }}" method="post">
+                            <form action="{{ url_for('main.fim_carga', controle_id=controle.id) }}" method="post">
                         <button type="submit" class="btn btn-danger btn-sm" {% if controle.concluido %}disabled{% endif %}>Concluído</button>
                             </form>
                             {% endif %}
@@ -85,4 +85,5 @@
             </div>    
     <div>
      
+
 {% endblock %}
