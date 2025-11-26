@@ -52,6 +52,7 @@ def create_app():
 
     # Importa rotas
     from gestaopatio import routes
+    from gestaopatio.routes import bp
     app.register_blueprint(routes.bp)
 
     return app
