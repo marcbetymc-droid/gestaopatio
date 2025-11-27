@@ -284,20 +284,20 @@ def lista_picking():
 @bp.route('/perfil')
 @login_required
 def perfil():
-       foto_perfil=url_for('main.static', filename='fotos_perfil/koandina.jpg')
+       foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil.html', foto_perfil=foto_perfil)
     
 @bp.route('/perfil_moto')
 @login_required
 def perfil_moto():
        form_moto = FormMotorista()
-       foto_motorista=url_for('main.static', filename='fotos_perfil/koandina.jpg')
+       foto_motorista=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil_Motorista.html', foto_motorista=foto_motorista)
 
 @bp.route('/graficos')
 @login_required
 def graficos():
-       foto_perfil=url_for('main.static', filename='fotos_perfil/koandina.jpg')
+       foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
        return render_template('Gráficos.html', foto_perfil=foto_perfil)
     
     
