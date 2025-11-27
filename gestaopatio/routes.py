@@ -114,7 +114,7 @@ def painel_rota():
     from gestaopatio.models import Control_Patio
 
     resultado4 = cache.get('painel_rota_page')
-    if resultado3:
+    if resultado4:
         return resultado4          
     lista_patio = Control_Patio.query.filter(Control_Patio.hora_conclusao == None).order_by(Control_Patio.num_doca).all()
     #lista_patio = Control_Patio.query.filter(Control_Patio.num_frota == '1057').order_by(Control_Patio.num_doca).all()
