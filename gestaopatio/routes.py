@@ -229,7 +229,7 @@ def lista_arquivos():
     except Exception as e:
         # Em caso de erro, exibe uma mensagem e redireciona
         flash(f'Ocorreu um erro ao carregar os arquivos: {str(e)}', 'alert-danger')
-        return redirect(url_for('arq_produtos'))
+        return redirect(url_for('main.arq_produtos'))
 
 @bp.route('/gestao_picking')
 def gestao_picking():
@@ -266,7 +266,7 @@ def gestao_picking():
     
     if not separacao:
         flash('Transporte não encontrado.', 'alert-danger')
-        return redirect(url_for('painel_rota'))
+        return redirect(url_for('main.painel_rota'))
     
     current_time = datetime.now()
     return render_template('Painel Picking.html', controle_patio=controle_patio, separacao=separacao, now=current_time)
@@ -283,20 +283,20 @@ def lista_picking():
 @bp.route('/perfil')
 @login_required
 def perfil():
-       foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
+       foto_perfil=url_for('main.static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil.html', foto_perfil=foto_perfil)
     
 @bp.route('/perfil_moto')
 @login_required
 def perfil_moto():
        form_moto = FormMotorista()
-       foto_motorista=url_for('static', filename='fotos_perfil/koandina.jpg')
+       foto_motorista=url_for('main.static', filename='fotos_perfil/koandina.jpg')
        return render_template('Perfil_Motorista.html', foto_motorista=foto_motorista)
 
 @bp.route('/graficos')
 @login_required
 def graficos():
-       foto_perfil=url_for('static', filename='fotos_perfil/koandina.jpg')
+       foto_perfil=url_for('main.static', filename='fotos_perfil/koandina.jpg')
        return render_template('Gráficos.html', foto_perfil=foto_perfil)
     
     
@@ -356,7 +356,7 @@ def agendamento():
         database.session.commit()
 
         flash(f'Agendamento gerado com sucesso para: {form_agendamento.transportadora.data}', 'alert-success')
-        return redirect(url_for('agendamento'))
+        return redirect(url_for('main.agendamento'))
 
     elif form_agendamento.validate_on_submit() and 'botao_submit_arq_agendamento' in request.form:
         return render_template('Arq_Agendamento.html')
@@ -437,7 +437,7 @@ def upload_file():
                 flash(f'Arquivo {file.filename} carregado e atualizado com sucesso', 'alert-success')
             except Exception as e:
                 flash(f'Erro ao processar o arquivo: {e}', 'alert-danger')
-            return redirect(url_for('upload_file'))
+            return redirect(url_for('main.upload_file'))
 
     return render_template('Arq_Agendamento.html')
 
@@ -544,7 +544,7 @@ def arq_produtos():
                 flash(f'Arquivo {file.filename} carregado e atualizado com sucesso', 'alert-success')
             except Exception as e:
                 flash(f'Erro ao processar o arquivo: {e}', 'alert-danger')
-            return redirect(url_for('arq_produtos'))
+            return redirect(url_for('main.arq_produtos'))
 
     return render_template('Produtos Cargas.html')
 
@@ -590,13 +590,13 @@ def reagenda():
            database.session.add(novo_agendamento)
            database.session.commit()
            flash(f'Reagendamento realizado com sucesso: {form_reagenda.transportadora.data}', 'alert-success')
-           return redirect(url_for('carrega') )
+           return redirect(url_for('main.carrega') )
        elif request.method == 'POST' and form_reagenda.validate_on_submit() and 'botao_submit_cancelar' in request.form:
            botao_clicado = 'Cancelar'
            agendamentos.status_carga='CANCELADO'
            database.session.commit()
            flash(f'Cancelamento realizado com sucesso: {form_reagenda.transportadora.data}', 'alert-success')
-           return redirect(url_for('carrega') )
+           return redirect(url_for('main.carrega') )
        elif request.method == 'POST' and form_reagenda.validate_on_submit() and 'botao_submit_alterar' in request.form:
            botao_clicado = 'Alterar'
            agendamentos.origem=form_reagenda.origem.data
@@ -610,7 +610,7 @@ def reagenda():
            agendamentos.usuario_alteracao=current_user.username     
            database.session.commit()
            flash(f'Alteração realizado com sucesso: {form_reagenda.transportadora.data}', 'alert-success')
-           return redirect(url_for('carrega') )    
+           return redirect(url_for('main.carrega') )    
        return render_template('Reagendamento.html', form_reagenda=form_reagenda, botao_clicado=botao_clicado)
     
 @bp.route('/login', methods=['GET', 'POST'])
@@ -626,7 +626,7 @@ def login():
                if par_next:
                    return redirect (par_next)
                else:    
-                   return redirect(url_for('home') )
+                   return redirect(url_for('main.home') )
            else:
                flash(f'Falha no login! Usuario ou Senha Incorretos', 'alert-danger')
        return render_template('Login.html', form_login=form_login)
@@ -655,7 +655,7 @@ def cadastro():
             database.session.add(cadastramento)
             database.session.commit()
             flash(f'Cadastro feito com sucesso para: {form_conta.username.data}', 'alert-success')
-            return redirect(url_for('cadastro'))
+            return redirect(url_for('main.cadastro'))
         except Exception as e:
             current_app.logger.error(f'Erro ao cadastrar usuário: {e}')
             flash('Ocorreu um erro ao processar seu cadastro. Tente novamente mais tarde.', 'alert-danger')
@@ -681,7 +681,7 @@ def entidade():
            database.session.add(entidade)
            database.session.commit()
            flash(f'Cliente {form_cliente.nome_cliente.data} cadastrado com sucesso', 'alert-success')
-           return redirect(url_for('entidade') )
+           return redirect(url_for('main.entidade') )
        if form_embarcador.validate_on_submit() and 'botao_submit_embarcador' in request.form:
            entidade = Embarcador_Andina(nome_embarcador = form_embarcador.nome_embarcador.data, 
                                          cnpj_embarcador = form_embarcador.cnpj_embarcador.data, 
@@ -711,7 +711,7 @@ def check_in():
     database.session.commit()
 
     flash('Check-In realizado com sucesso!', 'alert-success')
-    return redirect(url_for('painel'))
+    return redirect(url_for('main.painel'))
 
 @bp.route('/entrada_patio/', methods=['GET', 'POST'])
 def entrada_patio():
@@ -724,7 +724,7 @@ def entrada_patio():
         agendamentos_e.fase_carga = "EM PATIO"
         database.session.commit()
         flash('Entrada pátio realizado com sucesso!', 'alert-success')
-        return redirect(url_for('painel'))
+        return redirect(url_for('main.painel'))
     
 @bp.route('/inicio_carga/', methods=['GET', 'POST'])
 def inicio_carga():
@@ -737,7 +737,7 @@ def inicio_carga():
         agendamentos_i.fase_carga = "CARREGANDO"
         database.session.commit()
         flash('Inicio de operação realizado com sucesso!', 'alert-success')
-        return redirect(url_for('painel'))
+        return redirect(url_for('main.painel'))
     
 @bp.route('/fim_carga/', methods=['GET', 'POST'])
 def fim_carga():
@@ -750,7 +750,7 @@ def fim_carga():
         agendamentos_f.fase_carga = "CONCLUIDO"
         database.session.commit()
         flash('Operação concluída com sucesso!', 'alert-success')
-        return redirect(url_for('painel'))
+        return redirect(url_for('main.painel'))
     
 @bp.route('/saida_portaria/', methods=['GET', 'POST'])
 def saida_portaria():
@@ -763,7 +763,7 @@ def saida_portaria():
         agendamentos_s.fase_carga = "EM ROTA"
         database.session.commit()
         flash('Saída portaria realizado com sucesso!', 'alert-success')
-        return redirect(url_for('painel'))
+        return redirect(url_for('main.painel'))
 
 
 @bp.route('/controle_faixa', methods=['GET', 'POST'])
@@ -788,7 +788,7 @@ def controle_faixa():
            database.session.add(gestao_patio)
            database.session.commit()
            flash(f'Frota cadastrada com sucesso para: {form_gestao_patio.num_frota.data}', 'alert-success')
-           return redirect(url_for('painel_rota') )
+           return redirect(url_for('main.painel_rota') )
 
         return render_template('Control Patio.html', form_gestao_patio=form_gestao_patio)
 
@@ -848,7 +848,7 @@ def controle_patio():
 
         database.session.commit()
         flash(f'Frota alterada com sucesso para: {form_gestao_patio.num_frota.data}', 'alert-success')
-        return redirect(url_for('painel_rota'))
+        return redirect(url_for('main.painel_rota'))
 
     return render_template('Control Patio.html', form_gestao_patio=form_gestao_patio)
 
@@ -864,7 +864,7 @@ def carregar_frota():
         controles.status_frota = 'Carregando'
         database.session.commit()
         flash(f'Frota em carregamento', 'alert-success')
-        return redirect(url_for('painel_rota'))
+        return redirect(url_for('main.painel_rota'))
 
 
 @bp.route('/concluir_faixa', methods=['GET', 'POST'])
@@ -880,7 +880,7 @@ def concluir_faixa():
         controles.status_frota = 'Finalizada'
         database.session.commit()
         flash(f'Frota finalizada', 'alert-success')
-        return redirect(url_for('painel_rota'))
+        return redirect(url_for('main.painel_rota'))
 
 @bp.route('/arq_picking', methods=['GET', 'POST'])
 def arq_picking():
@@ -891,7 +891,7 @@ def arq_picking():
             
             if not conferencia_file or not pallet_c_file:
                 flash("Arquivos necessários não encontrados.", 'alert-danger')
-                return redirect(url_for('arq_picking'))
+                return redirect(url_for('main.arq_picking'))
             
             conferencia_df = pd.read_excel(conferencia_file, engine='openpyxl')
             pallet_c_df = pd.read_excel(pallet_c_file, engine='openpyxl')
@@ -906,7 +906,7 @@ def arq_picking():
             flash('Arquivos carregados, mesclados e dados salvos com sucesso', 'alert-success')
         except Exception as e:
             flash(f'Erro ao processar o arquivo: {e}', 'alert-danger')
-        return redirect(url_for('arq_picking'))
+        return redirect(url_for('main.arq_picking'))
     
     return render_template('Dados Picking.html')
 
@@ -958,4 +958,4 @@ def save_to_database(merged_df):
 def sair():
        logout_user()
        flash(f'Logout feito com sucesso!', 'alert-success')
-       return redirect(url_for('home') )
+       return redirect(url_for('main.home') )
