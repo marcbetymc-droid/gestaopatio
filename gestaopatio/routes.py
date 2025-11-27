@@ -18,6 +18,7 @@ from sqlalchemy import func
 from gestaopatio import database, bcrypt
 from zoneinfo import ZoneInfo
 from gestaopatio import cache
+from flask import current_app
 
 bp = Blueprint('main', __name__)
 
@@ -656,7 +657,7 @@ def cadastro():
             flash(f'Cadastro feito com sucesso para: {form_conta.username.data}', 'alert-success')
             return redirect(url_for('cadastro'))
         except Exception as e:
-            app.logger.error(f'Erro ao cadastrar usuário: {e}')
+            current_app.logger.error(f'Erro ao cadastrar usuário: {e}')
             flash('Ocorreu um erro ao processar seu cadastro. Tente novamente mais tarde.', 'alert-danger')
     return render_template('Cadastro.html', form_conta=form_conta)
 
