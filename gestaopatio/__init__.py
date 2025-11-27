@@ -29,9 +29,17 @@ def create_app():
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['WTF_CSRF_ENABLED'] = True
-    app.config['CACHE_TYPE'] = 'SimpleCache'
+    app.config['CACHE_TYPE'] = 'RedisCache'
+    app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
     app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 
+
+    # ✅ Configurações de segurança para cookies
+    app.config['SESSION_COOKIE_SECURE'] = True       # Só envia cookies via HTTPS
+    app.config['SESSION_COOKIE_HTTPONLY'] = True     # Bloqueia acesso via JavaScript
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'    # Protege contra CSRF básico
+
+    
     # Inicializa extensões
     database.init_app(app)
     migrate.init_app(app, database)
