@@ -695,7 +695,7 @@ def entidade():
            database.session.commit()
            flash(f'Embarcador {form_cliente.nome_embarcador.data} cadastrado com sucesso', 'alert-success')
            return redirect(url_for('entidade') )    
-       return render_template('Cadastro_entidades.html', form_cliente=form_cliente, form_embarcador=form_embarcador)
+       return render_template('Cadastro_Entidades.html', form_cliente=form_cliente, form_embarcador=form_embarcador)
     
 @bp.route('/check_in/', methods=['GET', 'POST'])
 def check_in():
