@@ -19,6 +19,7 @@ from gestaopatio import database, bcrypt
 from zoneinfo import ZoneInfo
 from gestaopatio import cache
 from flask import current_app
+from gestaopatio.models import Usuario, Agendamentos, Motorista, Frota_Andina, Cliente_Andina, Frota_Terceiros, Arquivos, Vendas_ME, Control_Patio, ControlPicking, Pente_Fino
 
 bp = Blueprint('main', __name__)
 
