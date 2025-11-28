@@ -8,6 +8,11 @@ from flask_caching import Cache
 from dotenv import load_dotenv
 import os
 
+from flask_debugtoolbar import DebugToolbarExtension
+
+app.debug = True
+toolbar = DebugToolbarExtension(app)
+
 load_dotenv()
 
 # Inicialização das extensões (sem app)
